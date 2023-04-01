@@ -15,4 +15,8 @@
     <ProjectReference Include="..\AwesomeChilli.DAL\AwesomeChilli.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
