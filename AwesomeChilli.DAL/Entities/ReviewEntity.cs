@@ -9,7 +9,7 @@ namespace AwesomeChilli.DAL.Entities
     internal class ReviewEntity : EntityBase
     {
         public double Stars { get; set; }
-        public string Title { get; set; } = "";
+        public required string Title { get; set; }
         public string? Description { get; set; }
         public CommodityEntity? Commodity { get; set; }
     }

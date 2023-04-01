@@ -8,8 +8,7 @@ namespace AwesomeChilli.DAL.Entities
 {
     internal class CategoryEntity : EntityBase
     {
-        public string Name { get; set; } = "";
-
+        public required string Name { get; set; }
         public ICollection<CommodityEntity>? Commodities { get; set; }
     }
 }

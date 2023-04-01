@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    internal interface IEntity
+    public interface IEntity
     {
         public Guid Id { get; set; }
     }
