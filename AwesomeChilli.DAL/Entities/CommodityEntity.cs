@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    internal class CommodityEntity:EntityBase
+    public class CommodityEntity:EntityBase
     {
         public required string Name { get; set; }
         public string? Image { get; set; }

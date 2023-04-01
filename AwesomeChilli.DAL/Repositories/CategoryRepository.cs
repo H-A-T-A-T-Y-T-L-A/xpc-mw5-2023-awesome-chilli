@@ -7,7 +7,7 @@ using AwesomeChilli.DAL.Entities;
 
 namespace AwesomeChilli.DAL.Repositories
 {
-    internal class CategoryRepository : IRepository<CategoryEntity>
+    public class CategoryRepository : IRepository<CategoryEntity>
     {
         public Guid Create(CategoryEntity? entity)
         {

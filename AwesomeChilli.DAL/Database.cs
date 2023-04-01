@@ -7,7 +7,7 @@ using AwesomeChilli.DAL.Entities;
 
 namespace AwesomeChilli.DAL
 {
-    internal class Database
+    public class Database
     {
         private static readonly Lazy<Database> _LazyDatabase = new Lazy<Database>(() => new Database());
 

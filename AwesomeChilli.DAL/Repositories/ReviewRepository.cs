@@ -7,7 +7,7 @@ using AwesomeChilli.DAL.Entities;
 
 namespace AwesomeChilli.DAL.Repositories
 {
-    internal class ReviewRepository : IRepository<ReviewEntity>
+    public class ReviewRepository : IRepository<ReviewEntity>
     {
         public Guid Create(ReviewEntity? entity)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    internal class ReviewEntity : EntityBase
+    public class ReviewEntity : EntityBase
     {
         public double Stars { get; set; }
         public required string Title { get; set; }

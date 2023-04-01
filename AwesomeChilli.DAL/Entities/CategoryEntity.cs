@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    internal class CategoryEntity : EntityBase
+    public class CategoryEntity : EntityBase
     {
         public required string Name { get; set; }
         public ICollection<CommodityEntity>? Commodities { get; set; }
