@@ -11,13 +11,16 @@ namespace AwesomeChilli.DAL.Repositories
     {
         public Guid Create(ManufacturerEntity? entity)
         {
+            // copy the new entity to the found entity
             if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Create)} in  {nameof(ManufacturerRepository)} was null");
             }
 
+            // assign newly generated Guid
             entity.Id = Guid.NewGuid();
 
+            // insert into database
             Database.Instance.Manufacturers.Add(entity);
 
             return entity.Id;
@@ -30,18 +33,34 @@ namespace AwesomeChilli.DAL.Repositories
 
         public ManufacturerEntity Update(ManufacturerEntity? entity)
         {
+            // nonsense
             if(entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Update)} in {nameof(ManufacturerRepository)} was null");
             }
 
+            // find the entity to update
             var existing = Find(entity.Id);
 
+            // copy the new entity to the found entity
             existing.Name = entity.Name;
             existing.Image = entity.Image;
             existing.Description = entity.Description;
             existing.Country = entity.Country;
+
+
+            // remove found entity from its commodities
+            if (existing.Commodities is not null)
+                foreach (var c in existing.Commodities)
+                    c.Manufacturer = null;
+
+            // copy list of commodities
             existing.Commodities = entity.Commodities;
+
+            // add found entity back into its new commodities
+            if (existing.Commodities is not null)
+                foreach (var c in existing.Commodities)
+                    c.Manufacturer = existing;
 
             return existing;
         }
