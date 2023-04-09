@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
+using AwesomeChilli.API.EntityViews;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -13,9 +14,9 @@ namespace AwesomeChilli.API.Controllers
         Repositories.CommodityRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.CommodityEntity FindCommodity(Guid guid)
+        public CommodityView FindCommodity(Guid guid)
         {
-            return repository.Find(guid);
+            return new CommodityView(repository.Find(guid));
         }
 
         [HttpPost("/Create[controller]")]

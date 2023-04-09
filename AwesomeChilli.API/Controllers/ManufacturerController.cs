@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
+using AwesomeChilli.API.EntityViews;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -13,9 +14,9 @@ namespace AwesomeChilli.API.Controllers
         Repositories.ManufacturerRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.ManufacturerEntity FindManufacturer(Guid guid)
+        public ManufacturerView FindManufacturer(Guid guid)
         {
-            return repository.Find(guid);
+            return new ManufacturerView(repository.Find(guid));
         }
 
         [HttpPost("/Create[controller]")]
