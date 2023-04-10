@@ -20,9 +20,9 @@ namespace AwesomeChilli.API.Controllers
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateCategory(Entities.CategoryEntity newCategory)
+        public Guid CreateCategory(CategoryView newCategory)
         {
-            return repository.Create(newCategory);
+            return repository.Create(newCategory.MakeEntity());
         }
 
         [HttpPost("/Update[controller]")]

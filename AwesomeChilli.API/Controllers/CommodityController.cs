@@ -20,9 +20,9 @@ namespace AwesomeChilli.API.Controllers
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateCommodity(Entities.CommodityEntity newCommodity)
+        public Guid CreateCommodity(CommodityView newCommodity)
         {
-            return repository.Create(newCommodity);
+            return repository.Create(newCommodity.MakeEntity());
         }
 
         [HttpPost("/Update[controller]")]

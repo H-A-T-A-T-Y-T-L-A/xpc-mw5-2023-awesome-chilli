@@ -20,9 +20,9 @@ namespace AwesomeChilli.API.Controllers
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateManufacturer(Entities.ManufacturerEntity newManufacturer)
+        public Guid CreateManufacturer(ManufacturerView newManufacturer)
         {
-            return repository.Create(newManufacturer);
+            return repository.Create(newManufacturer.MakeEntity());
         }
 
         [HttpPost("/Update[controller]")]

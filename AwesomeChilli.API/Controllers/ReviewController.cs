@@ -20,9 +20,9 @@ namespace AwesomeChilli.API.Controllers
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateReview(Entities.ReviewEntity newReview)
+        public Guid CreateReview(ReviewView newReview)
         {
-            return repository.Create(newReview);
+            return repository.Create(newReview.MakeEntity());
         }
 
         [HttpPost("/Update[controller]")]

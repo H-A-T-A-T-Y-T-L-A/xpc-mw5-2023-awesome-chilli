@@ -4,6 +4,14 @@ namespace AwesomeChilli.API.EntityViews
 {
     public class ManufacturerView : ViewBase<ManufacturerEntity>
     {
+        public ManufacturerView()
+        {
+            Name = "";
+            Image = "";
+            Description = "";
+            Country = "";
+        }
+
         public ManufacturerView(ManufacturerEntity entity) : base(entity)
         {
             Name = entity.Name;
@@ -18,5 +26,16 @@ namespace AwesomeChilli.API.EntityViews
         public string Description { get; set; }
         public string Country { get; set; }
         public long CommodityCount { get; set; }
+
+        public override ManufacturerEntity MakeEntity()
+        {
+            return new()
+            {
+                Name = Name,
+                Image = Image,
+                Description = Description,
+                Country = Country,
+            };
+        }
     }
 }
