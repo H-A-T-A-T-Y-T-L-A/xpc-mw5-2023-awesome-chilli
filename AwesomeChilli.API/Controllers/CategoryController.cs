@@ -13,27 +13,57 @@ namespace AwesomeChilli.API.Controllers
         Repositories.CategoryRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.CategoryEntity FindCategory(Guid guid)
+        public ActionResult<CategoryView> FindCategory(Guid guid)
         {
-            return repository.Find(guid);
+            try
+            {
+                return Ok(new CategoryView(repository.Find(guid)));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateCategory(Entities.CategoryEntity newCategory)
+        public ActionResult<Guid> CreateCategory(CategoryView newCategory)
         {
-            return repository.Create(newCategory);
+            try
+            {
+                return Ok(repository.Create(newCategory.MakeEntity()));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Update[controller]")]
-        public void UpdateCategory(Entities.CategoryEntity updatedCategory)
+        public ActionResult UpdateCategory(CategoryView updatedCategory)
         {
-            repository.Update(updatedCategory);
+            try
+            {
+                repository.Update(updatedCategory.MakeEntity());
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
-        [HttpPost("/Delete[controller]")]
-        public void DeleteCategory(Guid guid)
+        [HttpDelete("/Delete[controller]")]
+        public ActionResult DeleteCategory(Guid guid)
         {
-            repository.Delete(guid);
+            try
+            {
+                repository.Delete(guid);
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
     }
 }

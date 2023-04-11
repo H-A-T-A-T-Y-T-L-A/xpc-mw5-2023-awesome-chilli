@@ -13,27 +13,50 @@ namespace AwesomeChilli.API.Controllers
         Repositories.ReviewRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.ReviewEntity FindReview(Guid guid)
+        public ActionResult<ReviewView> FindReview(Guid guid)
         {
-            return repository.Find(guid);
+            try
+            {
+                return Ok(new ReviewView(repository.Find(guid)));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateReview(Entities.ReviewEntity newReview)
+        public ActionResult<Guid> CreateReview(ReviewView newReview)
         {
-            return repository.Create(newReview);
+            return Ok(repository.Create(newReview.MakeEntity()));
         }
 
         [HttpPost("/Update[controller]")]
-        public void UpdateReview(Entities.ReviewEntity updatedReview)
+        public ActionResult UpdateReview(ReviewView updatedReview)
         {
-            repository.Update(updatedReview);
+            try
+            {
+                repository.Update(updatedReview.MakeEntity());
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
-        [HttpPost("/Delete[controller]")]
-        public void DeleteReview(Guid guid)
+        [HttpDelete("/Delete[controller]")]
+        public ActionResult DeleteReview(Guid guid)
         {
-            repository.Delete(guid);
+            try
+            {
+                repository.Delete(guid);
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
     }
 }
