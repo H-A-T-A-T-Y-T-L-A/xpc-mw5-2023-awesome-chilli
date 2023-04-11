@@ -11,13 +11,16 @@ namespace AwesomeChilli.DAL.Repositories
     {
         public Guid Create(CategoryEntity? entity)
         {
+            // do not allow null inserts
             if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Create)} in {nameof(CategoryRepository)} was null");
             }
 
+            // assign newly generated Guid
             entity.Id = Guid.NewGuid();
 
+            // insert into database
             Database.Instance.Categories.Add(entity);
 
             return entity.Id;
@@ -30,14 +33,30 @@ namespace AwesomeChilli.DAL.Repositories
 
         public CategoryEntity Update(CategoryEntity? entity)
         {
+            // nonsense
             if(entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Update)} in {nameof(CategoryRepository)} was null");
             }
 
+            // find the entity to update
             var existing = Find(entity.Id);
 
+            // copy the new entity to the found entity
             existing.Name = entity.Name;
+
+            // remove found entity from its current commodities
+            if(existing.Commodities is not null)
+                foreach (var commodity in existing.Commodities)
+                    commodity.Category = null;
+
+            // copy list of commodities
+            existing.Commodities = entity.Commodities;
+
+            // add found entity back into its new commodities
+            if(existing.Commodities is not null)
+                foreach (var commodity in existing.Commodities)
+                    commodity.Category = existing;
 
             return existing;
         }

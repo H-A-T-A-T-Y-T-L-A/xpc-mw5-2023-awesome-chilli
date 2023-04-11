@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    public class EntityBase : IEntity
+    public abstract class EntityBase : IEntity
     {
         public Guid Id { get; set; }
     }
