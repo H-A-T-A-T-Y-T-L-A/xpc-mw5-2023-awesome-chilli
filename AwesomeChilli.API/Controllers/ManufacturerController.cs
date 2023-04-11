@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
+using AwesomeChilli.API.EntityViews;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -13,27 +14,57 @@ namespace AwesomeChilli.API.Controllers
         Repositories.ManufacturerRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.ManufacturerEntity FindManufacturer(Guid guid)
+        public ActionResult<ManufacturerView> FindManufacturer(Guid guid)
         {
-            return repository.Find(guid);
+            try
+            {
+                return Ok(new ManufacturerView(repository.Find(guid)));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateManufacturer(Entities.ManufacturerEntity newManufacturer)
+        public ActionResult<Guid> CreateManufacturer(ManufacturerView newManufacturer)
         {
-            return repository.Create(newManufacturer);
+            try
+            {
+                return Ok(repository.Create(newManufacturer.MakeEntity()));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Update[controller]")]
-        public void UpdateManufacturer(Entities.ManufacturerEntity updatedManufacturer)
+        public ActionResult UpdateManufacturer(ManufacturerView updatedManufacturer)
         {
-            repository.Update(updatedManufacturer);
+            try
+            {
+                repository.Update(updatedManufacturer.MakeEntity());
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
-        [HttpPost("/Delete[controller]")]
-        public void DeleteManufacturer(Guid guid)
+        [HttpDelete("/Delete[controller]")]
+        public ActionResult DeleteManufacturer(Guid guid)
         {
-            repository.Delete(guid);
+            try
+            {
+                repository.Delete(guid);
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
     }
 }

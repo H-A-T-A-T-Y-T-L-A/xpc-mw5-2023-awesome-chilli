@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
+using AwesomeChilli.API.EntityViews;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -13,27 +14,58 @@ namespace AwesomeChilli.API.Controllers
         Repositories.CommodityRepository repository = new();
 
         [HttpGet("/Find[controller]")]
-        public Entities.CommodityEntity FindCommodity(Guid guid)
+        public ActionResult<CommodityView> FindCommodity(Guid guid)
         {
-            return repository.Find(guid);
+            try
+            {
+                return Ok(new CommodityView(repository.Find(guid)));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Create[controller]")]
-        public Guid CreateCommodity(Entities.CommodityEntity newCommodity)
+        public ActionResult<Guid> CreateCommodity(CommodityView newCommodity)
         {
-            return repository.Create(newCommodity);
+            try
+            {
+                return Ok(repository.Create(newCommodity.MakeEntity()));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("/Update[controller]")]
-        public void UpdateCommodity(Entities.CommodityEntity updatedCommodity)
+        public ActionResult UpdateCommodity(CommodityView updatedCommodity)
         {
-            repository.Update(updatedCommodity);
+            try
+            {
+                repository.Update(updatedCommodity.MakeEntity());
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
-        [HttpPost("/Delete[controller]")]
-        public void DeleteCommodity(Guid guid)
+        [HttpDelete("/Delete[controller]")]
+        public ActionResult DeleteCommodity(Guid guid)
         {
-            repository.Delete(guid);
+            try
+            {
+                repository.Delete(guid);
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
+
         }
     }
 }
