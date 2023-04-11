@@ -66,5 +66,18 @@ namespace AwesomeChilli.API.Controllers
                 return NotFound();
             }
         }
+
+        [HttpGet("/Page[controller]")]
+        public ActionResult<IEnumerable<CategoryView>> GetPage (int page, int PageSize)
+        {
+            try
+            {
+                return Ok(repository.GetPage(page, PageSize).Select(x => new CategoryView(x)));
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
     }
 }

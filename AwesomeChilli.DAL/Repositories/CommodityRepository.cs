@@ -127,5 +127,10 @@ namespace AwesomeChilli.DAL.Repositories
             // remove existing entity
             Database.Instance.Commodities.Remove(entity);
         }
+
+        public IEnumerable<CommodityEntity> GetPage(int page, int pageSize)
+        {
+            return Database.Instance.Commodities.Skip(page * pageSize).Take(pageSize);
+        }
     }
 }

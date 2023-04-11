@@ -4,6 +4,7 @@ using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.EntityViews;
+using AwesomeChilli.DAL.Repositories;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -60,6 +61,19 @@ namespace AwesomeChilli.API.Controllers
             {
                 repository.Delete(guid);
                 return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("/Page[controller]")]
+        public ActionResult<IEnumerable<ManufacturerView>> GetPage (int page, int PageSize)
+        {
+            try
+            {
+                return Ok(repository.GetPage(page, PageSize).Select(x => new ManufacturerView(x)));
             }
             catch
             {

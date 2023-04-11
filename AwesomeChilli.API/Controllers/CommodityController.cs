@@ -67,5 +67,18 @@ namespace AwesomeChilli.API.Controllers
             }
 
         }
+
+        [HttpGet("/Page[controller]")]
+        public ActionResult<IEnumerable<CommodityView>> GetPage (int page, int PageSize)
+        {
+            try
+            {
+                return Ok(repository.GetPage(page, PageSize).Select(x => new CommodityView(x)));
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
     }
 }
