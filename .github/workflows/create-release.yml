@@ -27,7 +27,7 @@ jobs:
     - name: Create artifacts
       run: dotnet publish ./AwesomeChilli.API -c Release -o Build/AwesomeChilli.API
     - name: Create artifact archives
-      run: tar -cz --file Build/AwesomeChilli.API.tar.gz
+      run: tar -cz --file Build/AwesomeChilli.API.tar.gz Build/AwesomeChilli.API/*
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
