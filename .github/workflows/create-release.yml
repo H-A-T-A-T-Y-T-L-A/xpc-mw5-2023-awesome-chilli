@@ -25,7 +25,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Create artifacts
-      run: dotnet publish ./WebApi -c Release -o out
+      run: dotnet publish ./AwesomeChilli.API -c Release -o Build/AwesomeChilli.API
     - name: Bump version and push tag
       id: tag_version
       uses: mathieudutour/github-tag-action@v6.1
