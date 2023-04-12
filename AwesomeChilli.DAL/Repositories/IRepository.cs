@@ -13,5 +13,6 @@ namespace AwesomeChilli.DAL.Repositories
         TEntity Find(Guid id);
         TEntity Update(TEntity? entity);
         void Delete(Guid id);
+        IEnumerable<TEntity> GetPage(int page, int pageSize);
     }
 }
