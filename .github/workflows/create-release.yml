@@ -26,6 +26,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Create artifacts
       run: dotnet publish ./AwesomeChilli.API -c Release -o Build/AwesomeChilli.API
+    - name: Create artifact archives
+      run: tar -cz --file Build/AwesomeChilli.API.tar.gz
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -39,7 +41,7 @@ jobs:
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1.12.0
       with:
-        artifacts: Build/AwesomeChilli.API/*
+        artifacts: Build/AwesomeChilli.API.tar.gz
         tag: ${{ steps.tag_version.outputs.new_tag }}
         name: Release ${{ steps.tag_version.outputs.new_tag }}
         body: ${{ steps.tag_version.outputs.changelog }}
