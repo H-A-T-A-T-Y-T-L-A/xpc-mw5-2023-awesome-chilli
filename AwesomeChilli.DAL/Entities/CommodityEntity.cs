@@ -8,11 +8,22 @@ namespace AwesomeChilli.DAL.Entities
 {
     public class CommodityEntity:EntityBase
     {
-        public required string Name { get; set; }
+        [Map(nameof(Name))]
+        public string Name { get; set; } = "";
+
+        [Map(nameof(Image))]
         public string? Image { get; set; }
+
+        [Map(nameof(Description))]
         public string? Description { get; set; }
+
+        [Map(nameof(Price))]
         public decimal? Price { get; set; }
+
+        [Map(nameof(Weight))]
         public decimal? Weight { get; set; }
+
+        [Map(nameof(Stock))]
         public long Stock { get; set; }
 
         public CategoryEntity? Category { get; set; }

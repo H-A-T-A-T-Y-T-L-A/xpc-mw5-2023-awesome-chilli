@@ -4,81 +4,17 @@ using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.EntityViews;
+using AwesomeChilli.DAL.Entities;
+using AwesomeChilli.DAL.Repositories;
 
 namespace AwesomeChilli.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommodityController : ControllerBase
+    public class CommodityController : RepositoryControllerBase<CommodityEntity, CommodityData>
     {
-        Repositories.CommodityRepository repository = new();
-
-        [HttpGet("/Find[controller]")]
-        public ActionResult<CommodityView> FindCommodity(Guid guid)
+        public CommodityController(IRepository<CommodityEntity> repository) : base(repository)
         {
-            try
-            {
-                return Ok(new CommodityView(repository.Find(guid)));
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost("/Create[controller]")]
-        public ActionResult<Guid> CreateCommodity(CommodityView newCommodity)
-        {
-            try
-            {
-                return Ok(repository.Create(newCommodity.MakeEntity()));
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost("/Update[controller]")]
-        public ActionResult UpdateCommodity(CommodityView updatedCommodity)
-        {
-            try
-            {
-                repository.Update(updatedCommodity.MakeEntity());
-                return Ok();
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpDelete("/Delete[controller]")]
-        public ActionResult DeleteCommodity(Guid guid)
-        {
-            try
-            {
-                repository.Delete(guid);
-                return Ok();
-            }
-            catch
-            {
-                return NotFound();
-            }
-
-        }
-
-        [HttpGet("/Page[controller]")]
-        public ActionResult<IEnumerable<CommodityView>> GetPage (int page, int PageSize)
-        {
-            try
-            {
-                return Ok(repository.GetPage(page, PageSize).Select(x => new CommodityView(x)));
-            }
-            catch
-            {
-                return NotFound();
-            }
         }
     }
 }

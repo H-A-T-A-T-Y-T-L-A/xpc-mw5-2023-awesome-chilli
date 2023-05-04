@@ -4,80 +4,18 @@ using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.EntityViews;
+using AwesomeChilli.API.DataMappers;
+using AwesomeChilli.DAL.Entities;
+using AwesomeChilli.DAL.Repositories;
 
 namespace AwesomeChilli.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : RepositoryControllerBase<CategoryEntity, CategoryData>
     {
-        Repositories.CategoryRepository repository = new();
-
-        [HttpGet("/Find[controller]")]
-        public ActionResult<CategoryView> FindCategory(Guid guid)
+        public CategoryController(IRepository<CategoryEntity> repository) : base(repository)
         {
-            try
-            {
-                return Ok(new CategoryView(repository.Find(guid)));
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost("/Create[controller]")]
-        public ActionResult<Guid> CreateCategory(CategoryView newCategory)
-        {
-            try
-            {
-                return Ok(repository.Create(newCategory.MakeEntity()));
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost("/Update[controller]")]
-        public ActionResult UpdateCategory(CategoryView updatedCategory)
-        {
-            try
-            {
-                repository.Update(updatedCategory.MakeEntity());
-                return Ok();
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpDelete("/Delete[controller]")]
-        public ActionResult DeleteCategory(Guid guid)
-        {
-            try
-            {
-                repository.Delete(guid);
-                return Ok();
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpGet("/Page[controller]")]
-        public ActionResult<IEnumerable<CategoryView>> GetPage (int page, int PageSize)
-        {
-            try
-            {
-                return Ok(repository.GetPage(page, PageSize).Select(x => new CategoryView(x)));
-            }
-            catch
-            {
-                return NotFound();
-            }
         }
     }
 }
