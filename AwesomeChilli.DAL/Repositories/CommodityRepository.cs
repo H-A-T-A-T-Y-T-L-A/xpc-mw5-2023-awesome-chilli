@@ -9,6 +9,13 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class CommodityRepository : IRepository<CommodityEntity>
     {
+        private Database database { get; }
+
+        public CommodityRepository(Database database)
+        {
+            this.database = database;
+        }
+
         public Guid Create(CommodityEntity? entity)
         {
             // do not allow null inserts
@@ -21,17 +28,17 @@ namespace AwesomeChilli.DAL.Repositories
             entity.Id = Guid.NewGuid();
 
             // insert into database
-            Database.Instance.Commodities.Add(entity);
+            database.Commodities.Add(entity);
 
             // add self to category
-            if(entity.Category is not null)
+            if (entity.Category is not null)
             {
                 entity.Category.Commodities ??= new List<CommodityEntity>();
                 entity.Category.Commodities.Add(entity);
             }
 
             // add self to manufacturer
-            if(entity.Manufacturer is not null)
+            if (entity.Manufacturer is not null)
             {
                 entity.Manufacturer.Commodities ??= new List<CommodityEntity>();
                 entity.Manufacturer.Commodities.Add(entity);
@@ -42,13 +49,13 @@ namespace AwesomeChilli.DAL.Repositories
 
         public CommodityEntity Find(Guid id)
         {
-            return Database.Instance.Commodities.Single(e => e.Id == id);
+            return database.Commodities.Single(e => e.Id == id);
         }
 
         public CommodityEntity Update(CommodityEntity? entity)
         {
             // nonsense
-            if(entity is null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Update)} in {nameof(CommodityRepository)} was null");
             }
@@ -65,26 +72,26 @@ namespace AwesomeChilli.DAL.Repositories
             existing.Stock = entity.Stock;
 
             // delete found entity from its previous category
-            if(entity.Category is not null)
+            if (entity.Category is not null)
                 entity.Category?.Commodities?.Remove(entity);
 
             // delete found entity from its previous manufacturer
-            if(entity.Manufacturer is not null)
+            if (entity.Manufacturer is not null)
                 entity.Manufacturer?.Commodities?.Remove(entity);
 
             // copy references
             existing.Category = entity.Category;
             existing.Manufacturer = entity.Manufacturer;
-            
+
             // add found entity to its new category
-            if(existing.Category is not null)
+            if (existing.Category is not null)
             {
                 existing.Category.Commodities ??= new List<CommodityEntity>();
                 existing.Category.Commodities.Add(existing);
             }
 
             // add found entity to its new category
-            if(existing.Manufacturer is not null)
+            if (existing.Manufacturer is not null)
             {
                 existing.Manufacturer.Commodities ??= new List<CommodityEntity>();
                 existing.Manufacturer.Commodities.Add(existing);
@@ -112,25 +119,25 @@ namespace AwesomeChilli.DAL.Repositories
             var entity = Find(id);
 
             // delete all reviews of commodity
-            if(entity.Reviews is not null)
+            if (entity.Reviews is not null)
                 foreach (var r in entity.Reviews)
-                    Database.Instance.Reviews.Remove(r);
+                    database.Reviews.Remove(r);
 
             // delete self from category
-            if(entity.Category is not null)
+            if (entity.Category is not null)
                 entity.Category?.Commodities?.Remove(entity);
 
             // delete self from manufacturer
-            if(entity.Manufacturer is not null)
+            if (entity.Manufacturer is not null)
                 entity.Manufacturer?.Commodities?.Remove(entity);
 
             // remove existing entity
-            Database.Instance.Commodities.Remove(entity);
+            database.Commodities.Remove(entity);
         }
 
         public IEnumerable<CommodityEntity> GetPage(int page, int pageSize)
         {
-            return Database.Instance.Commodities.Skip(page * pageSize).Take(pageSize);
+            return database.Commodities.Skip(page * pageSize).Take(pageSize);
         }
     }
 }

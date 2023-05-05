@@ -76,7 +76,7 @@ namespace AwesomeChilli.API.Controllers
         }
 
         [HttpGet("/Page[controller]")]
-        public ActionResult<IEnumerable<TDataObject>> GetPage (int page, int PageSize)
+        public ActionResult<IEnumerable<TDataObject>> GetPage(int page, int PageSize)
         {
             try
             {

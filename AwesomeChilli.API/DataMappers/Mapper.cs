@@ -2,23 +2,24 @@
 using AwesomeChilli.DAL;
 using AwesomeChilli.DAL.Entities;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AwesomeChilli.API.DataMappers
 {
     public static class Mapper
     {
-        public static TDataObject ToDataObject<TEntity, TDataObject> (this TEntity entity)
-            where TEntity: class, IEntity
-            where TDataObject: DataObjectBase<TEntity>, new()
+        public static TDataObject ToDataObject<TEntity, TDataObject>(this TEntity entity)
+            where TEntity : class, IEntity
+            where TDataObject : DataObjectBase<TEntity>, new()
         {
             TDataObject mappedDataObject = new();
             MapObjects(entity, ref mappedDataObject);
             return mappedDataObject;
         }
 
-        public static TEntity ToEntity<TEntity, TDataObject> (this TDataObject dataObject)
-            where TEntity: class, IEntity, new()
-            where TDataObject: DataObjectBase<TEntity>
+        public static TEntity ToEntity<TEntity, TDataObject>(this TDataObject dataObject)
+            where TEntity : class, IEntity, new()
+            where TDataObject : DataObjectBase<TEntity>
         {
             TEntity mappedEntity = new();
             MapObjects(dataObject, ref mappedEntity);
@@ -30,15 +31,29 @@ namespace AwesomeChilli.API.DataMappers
             var fromProperties = typeof(TFrom).GetProperties();
             var toProperties = typeof(TTo).GetProperties();
 
-            foreach(var fromProperty in fromProperties)
+            foreach (var fromProperty in fromProperties)
             {
                 if (fromProperty.GetCustomAttribute<MapAttribute>()
                     is MapAttribute mapAttribute and not null)
                     if (toProperties.FirstOrDefault(x => x?.GetCustomAttribute<MapAttribute>()?.MapName == mapAttribute.MapName)
                         is PropertyInfo toProperty and not null)
                     {
-                        toProperty.SetValue(to, fromProperty.GetValue(from));
-                        continue;
+                        if (!toProperty.CanWrite)
+                            continue;
+
+                        switch (mapAttribute.Method)
+                        {
+                            case MapMethod.Value:
+                                if (toProperty.PropertyType.IsAssignableFrom(fromProperty.PropertyType))
+                                    toProperty.SetValue(to, fromProperty.GetValue(from));
+                                break;
+
+                            case MapMethod.EntityId:
+                                if (fromProperty.GetValue(from) is IEntity fromEntityProperty
+                                    && typeof(TTo) == typeof(string))
+                                    toProperty.SetValue(to, fromEntityProperty.Id.ToString());
+                                break;
+                        }
                     }
             }
         }

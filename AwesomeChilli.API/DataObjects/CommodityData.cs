@@ -6,25 +6,14 @@ namespace AwesomeChilli.API.EntityViews
 {
     public class CommodityData : DataObjectBase<CommodityEntity>
     {
-        public CommodityData()
-        {
-            Name = "";
-            Image = "";
-            Description = "";
-            Category = "";
-            Manufacturer = "";
-            CategoryId = "";
-            ManufacturerId = "";
-        }
-
         [Map(nameof(CommodityEntity.Name))]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         [Map(nameof(CommodityEntity.Image))]
-        public string Image { get; set; }
+        public string Image { get; set; } = "";
 
         [Map(nameof(CommodityEntity.Description))]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         [Map(nameof(CommodityEntity.Price))]
         public decimal? Price { get; set; }
@@ -33,14 +22,21 @@ namespace AwesomeChilli.API.EntityViews
         public decimal? Weight { get; set; }
 
         [Map(nameof(CommodityEntity.Stock))]
-        public long Stock { get; set; }
+        public long Stock { get; set; } = 0;
 
-        public string CategoryId { get; set; }
-        public string Category { get; set; }
+        [Map(nameof(CommodityEntity.Category), Method = MapMethod.EntityId)]
+        public string CategoryId { get; set; } = "";
 
-        public string ManufacturerId { get; set; }
-        public string Manufacturer { get; set; }
+        [Map(nameof(CommodityEntity.CategoryName))]
+        public string Category { get; set; } = "";
 
+        [Map(nameof(CommodityEntity.Manufacturer), Method = MapMethod.EntityId)]
+        public string ManufacturerId { get; set; } = "";
+
+        [Map(nameof(CommodityEntity.ManufacturerName))]
+        public string Manufacturer { get; set; } = "";
+
+        [Map(nameof(ReviewsAverage))]
         public double? ReviewsAverage { get; set; }
     }
 }

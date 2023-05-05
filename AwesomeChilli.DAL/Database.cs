@@ -9,15 +9,6 @@ namespace AwesomeChilli.DAL
 {
     public class Database
     {
-        private static readonly Lazy<Database> _LazyDatabase = new Lazy<Database>(() => new Database());
-
-        public static Database Instance => _LazyDatabase.Value;
-
-        public Database()
-        {
-        }
-
-
         public ICollection<CommodityEntity> Commodities { get; } = new List<CommodityEntity>();
         public ICollection<CategoryEntity> Categories { get; } = new List<CategoryEntity>();
         public ICollection<ManufacturerEntity> Manufacturers { get; } = new List<ManufacturerEntity>();

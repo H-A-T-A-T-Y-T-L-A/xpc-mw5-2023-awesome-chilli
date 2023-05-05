@@ -9,6 +9,13 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class ManufacturerRepository : IRepository<ManufacturerEntity>
     {
+        private Database database { get; }
+
+        public ManufacturerRepository(Database database)
+        {
+            this.database = database;
+        }
+
         public Guid Create(ManufacturerEntity? entity)
         {
             // copy the new entity to the found entity
@@ -21,20 +28,20 @@ namespace AwesomeChilli.DAL.Repositories
             entity.Id = Guid.NewGuid();
 
             // insert into database
-            Database.Instance.Manufacturers.Add(entity);
+            database.Manufacturers.Add(entity);
 
             return entity.Id;
         }
 
         public ManufacturerEntity Find(Guid id)
         {
-            return Database.Instance.Manufacturers.Single(e => e.Id == id);
+            return database.Manufacturers.Single(e => e.Id == id);
         }
 
         public ManufacturerEntity Update(ManufacturerEntity? entity)
         {
             // nonsense
-            if(entity is null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Update)} in {nameof(ManufacturerRepository)} was null");
             }
@@ -76,12 +83,12 @@ namespace AwesomeChilli.DAL.Repositories
                     c.Manufacturer = null;
 
             // remove existing entity
-            Database.Instance.Manufacturers.Remove(entity);
+            database.Manufacturers.Remove(entity);
         }
 
         public IEnumerable<ManufacturerEntity> GetPage(int page, int pageSize)
         {
-            return Database.Instance.Manufacturers.Skip(page * pageSize).Take(pageSize);
+            return database.Manufacturers.Skip(page * pageSize).Take(pageSize);
         }
     }
 }
