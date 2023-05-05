@@ -34,16 +34,8 @@ namespace AwesomeChilli.DAL.Entities
         public ManufacturerEntity? Manufacturer { get; set; }
         public ICollection<ReviewEntity> Reviews { get; set; } = new List<ReviewEntity>();
 
-
-        // [NotMapped, Map(nameof(CategoryId))]
-        // public string CategoryId => Category?.Id.ToString() ?? "";
-
         [NotMapped, Map(nameof(CategoryName))]
         public string CategoryName => Category?.Name ?? "";
-
-
-        // [NotMapped, Map(nameof(ManufacturerId))]
-        // public string ManufacturerId => Manufacturer?.Id.ToString() ?? "";
 
         [NotMapped, Map(nameof(ManufacturerName))]
         public string ManufacturerName => Manufacturer?.Name ?? "";

@@ -14,7 +14,7 @@ namespace AwesomeChilli.API.Controllers
     [ApiController]
     public class CategoryController : RepositoryControllerBase<CategoryEntity, CategoryData>
     {
-        public CategoryController(IRepository<CategoryEntity> repository) : base(repository)
+        public CategoryController(IRepository<CategoryEntity> repository, Mapper<CategoryEntity, CategoryData> mapper) : base(repository, mapper)
         {
         }
     }

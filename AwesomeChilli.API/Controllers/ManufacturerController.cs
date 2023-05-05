@@ -6,6 +6,7 @@ using Repositories = AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.EntityViews;
 using AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.DAL.Entities;
+using AwesomeChilli.API.DataMappers;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -13,7 +14,7 @@ namespace AwesomeChilli.API.Controllers
     [ApiController]
     public class ManufacturerController : RepositoryControllerBase<ManufacturerEntity, ManufacturerData>
     {
-        public ManufacturerController(IRepository<ManufacturerEntity> repository) : base(repository)
+        public ManufacturerController(IRepository<ManufacturerEntity> repository, Mapper<ManufacturerEntity, ManufacturerData> mapper) : base(repository, mapper)
         {
         }
     }

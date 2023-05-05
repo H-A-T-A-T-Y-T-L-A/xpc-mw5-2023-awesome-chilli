@@ -9,7 +9,7 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class ManufacturerRepository : IRepository<ManufacturerEntity>
     {
-        private Database database { get; }
+        private readonly Database database;
 
         public ManufacturerRepository(Database database)
         {

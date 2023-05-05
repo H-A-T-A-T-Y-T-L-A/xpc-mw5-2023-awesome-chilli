@@ -9,7 +9,7 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class CommodityRepository : IRepository<CommodityEntity>
     {
-        private Database database { get; }
+        private readonly Database database;
 
         public CommodityRepository(Database database)
         {

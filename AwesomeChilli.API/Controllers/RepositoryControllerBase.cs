@@ -15,10 +15,12 @@ namespace AwesomeChilli.API.Controllers
         where TEntity : class, IEntity, new()
         where TDataObject : DataObjectBase<TEntity>, new()
     {
-        IRepository<TEntity> repository;
-        public RepositoryControllerBase(IRepository<TEntity> repository)
+        readonly IRepository<TEntity> repository;
+        readonly Mapper<TEntity, TDataObject> mapper;
+        public RepositoryControllerBase(IRepository<TEntity> repository, Mapper<TEntity, TDataObject> mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         [HttpPost("/Find[controller]")]
@@ -26,7 +28,9 @@ namespace AwesomeChilli.API.Controllers
         {
             try
             {
-                return Ok(repository.Find(guid).ToDataObject<TEntity, TDataObject>());
+                TEntity foundEntity = repository.Find(guid);
+                TDataObject dataObject = mapper.EntityToDataObject(foundEntity);
+                return Ok(dataObject);
             }
             catch
             {
@@ -39,7 +43,9 @@ namespace AwesomeChilli.API.Controllers
         {
             try
             {
-                return Ok(repository.Create(newObject.ToEntity<TEntity, TDataObject>()));
+                TEntity newEntity = mapper.DataObjectToEntity(newObject);
+                Guid newEntityId = repository.Create(newEntity);
+                return Ok(newEntityId);
             }
             catch
             {
@@ -52,7 +58,8 @@ namespace AwesomeChilli.API.Controllers
         {
             try
             {
-                repository.Update(updateObject.ToEntity<TEntity, TDataObject>());
+                TEntity updateEntity = mapper.DataObjectToEntity(updateObject);
+                repository.Update(updateEntity);
                 return Ok();
             }
             catch
@@ -80,7 +87,7 @@ namespace AwesomeChilli.API.Controllers
         {
             try
             {
-                return Ok(repository.GetPage(page, PageSize).Select(x => x.ToDataObject<TEntity, TDataObject>()));
+                return Ok(repository.GetPage(page, PageSize).Select(mapper.EntityToDataObject));
             }
             catch
             {

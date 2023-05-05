@@ -9,7 +9,7 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class ReviewRepository : IRepository<ReviewEntity>
     {
-        private Database database { get; }
+        private readonly Database database;
 
         public ReviewRepository(Database database)
         {

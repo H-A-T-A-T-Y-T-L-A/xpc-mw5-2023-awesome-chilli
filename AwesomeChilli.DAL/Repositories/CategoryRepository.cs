@@ -9,7 +9,7 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class CategoryRepository : IRepository<CategoryEntity>
     {
-        private Database database { get; }
+        private readonly Database database;
 
         public CategoryRepository(Database database)
         {

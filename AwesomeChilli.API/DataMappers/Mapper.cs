@@ -1,32 +1,37 @@
-﻿using AwesomeChilli.API.EntityViews;
+﻿using AwesomeChilli.API.Controllers;
+using AwesomeChilli.API.EntityViews;
 using AwesomeChilli.DAL;
 using AwesomeChilli.DAL.Entities;
+using AwesomeChilli.DAL.Repositories;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 
 namespace AwesomeChilli.API.DataMappers
 {
-    public static class Mapper
+    public class Mapper<TEntity, TDataObject>
+        where TEntity : class, IEntity, new()
+        where TDataObject : DataObjectBase<TEntity>, new()
     {
-        public static TDataObject ToDataObject<TEntity, TDataObject>(this TEntity entity)
-            where TEntity : class, IEntity
-            where TDataObject : DataObjectBase<TEntity>, new()
+        private readonly IServiceProvider serviceProvider;
+        public Mapper(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
+
+        public TDataObject EntityToDataObject(TEntity entity)
         {
             TDataObject mappedDataObject = new();
             MapObjects(entity, ref mappedDataObject);
             return mappedDataObject;
         }
-
-        public static TEntity ToEntity<TEntity, TDataObject>(this TDataObject dataObject)
-            where TEntity : class, IEntity, new()
-            where TDataObject : DataObjectBase<TEntity>
+        public TEntity DataObjectToEntity(TDataObject dataObject)
         {
             TEntity mappedEntity = new();
             MapObjects(dataObject, ref mappedEntity);
             return mappedEntity;
         }
 
-        private static void MapObjects<TFrom, TTo>(TFrom from, ref TTo to)
+        private void MapObjects<TFrom, TTo>(TFrom from, ref TTo to)
         {
             var fromProperties = typeof(TFrom).GetProperties();
             var toProperties = typeof(TTo).GetProperties();
@@ -50,8 +55,21 @@ namespace AwesomeChilli.API.DataMappers
 
                             case MapMethod.EntityId:
                                 if (fromProperty.GetValue(from) is IEntity fromEntityProperty
-                                    && typeof(TTo) == typeof(string))
+                                    && toProperty.PropertyType == typeof(string))
+                                {
                                     toProperty.SetValue(to, fromEntityProperty.Id.ToString());
+                                }
+                                else if (fromProperty.GetValue(from) is string idString
+                                    && Guid.TryParse(idString, out Guid entityId))
+                                {
+                                    var repositoryType = typeof(IRepository<>).MakeGenericType(toProperty.PropertyType);
+                                    var repository = serviceProvider.GetService(repositoryType);
+
+                                    var findMethod = repositoryType?.GetMethod(nameof(IRepository<IEntity>.Find));
+
+                                    if (findMethod is not null)
+                                        toProperty.SetValue(to, findMethod.Invoke(repository, new object[] { entityId }));
+                                }
                                 break;
                         }
                     }
