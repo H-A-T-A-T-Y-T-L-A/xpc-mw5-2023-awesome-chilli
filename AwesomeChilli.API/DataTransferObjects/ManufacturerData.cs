@@ -17,6 +17,7 @@ namespace AwesomeChilli.API.DataTransferObjects
         [Map(nameof(ManufacturerEntity.Country))]
         public string Country { get; set; } = "";
 
+        [Map(nameof(ManufacturerEntity.CommodityCount))]
         public long CommodityCount { get; set; }
     }
 }

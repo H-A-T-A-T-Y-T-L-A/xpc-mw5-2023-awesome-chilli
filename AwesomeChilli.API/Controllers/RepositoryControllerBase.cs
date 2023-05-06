@@ -23,7 +23,7 @@ namespace AwesomeChilli.API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost("/Find[controller]")]
+        [HttpGet("/Find[controller]")]
         public ActionResult<TDataObject> Find(Guid guid)
         {
             try
@@ -75,19 +75,6 @@ namespace AwesomeChilli.API.Controllers
             {
                 repository.Delete(guid);
                 return Ok();
-            }
-            catch
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpGet("/Page[controller]")]
-        public ActionResult<IEnumerable<TDataObject>> GetPage(int page, int PageSize)
-        {
-            try
-            {
-                return Ok(repository.GetPage(page, PageSize).Select(mapper.EntityToDataObject));
             }
             catch
             {

@@ -9,10 +9,9 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class, IEntity
     {
-        Guid Create(TEntity? entity);
+        Guid Create(TEntity entity);
         TEntity Find(Guid id);
-        TEntity Update(TEntity? entity);
+        Guid Update(TEntity entity);
         void Delete(Guid id);
-        IEnumerable<TEntity> GetPage(int page, int pageSize);
     }
 }
