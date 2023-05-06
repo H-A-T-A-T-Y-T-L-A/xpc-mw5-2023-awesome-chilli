@@ -8,9 +8,16 @@ namespace AwesomeChilli.DAL.Entities
 {
     public class ReviewEntity : EntityBase
     {
-        public double Stars { get; set; }
-        public required string Title { get; set; }
-        public string? Description { get; set; }
+        [Map(nameof(Stars))]
+        public double Stars { get; set; } = 0;
+
+        [Map(nameof(Title))]
+        public string Title { get; set; } = "";
+
+        [Map(nameof(Description))]
+        public string Description { get; set; } = "";
+
+        [Map(nameof(Commodity), Method = MapMethod.EntityId)]
         public CommodityEntity? Commodity { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace AwesomeChilli.DAL.Entities
 {
     public abstract class EntityBase : IEntity
     {
+        [Map(nameof(Id))]
         public Guid Id { get; set; }
     }
 }

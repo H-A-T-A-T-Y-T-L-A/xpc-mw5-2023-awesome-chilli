@@ -9,6 +9,13 @@ namespace AwesomeChilli.DAL.Repositories
 {
     public class ReviewRepository : IRepository<ReviewEntity>
     {
+        private readonly Database database;
+
+        public ReviewRepository(Database database)
+        {
+            this.database = database;
+        }
+
         public Guid Create(ReviewEntity? entity)
         {
             // do not allow null inserts
@@ -21,7 +28,7 @@ namespace AwesomeChilli.DAL.Repositories
             entity.Id = Guid.NewGuid();
 
             // insert into database
-            Database.Instance.Reviews.Add(entity);
+            database.Reviews.Add(entity);
 
             // add self to commodity
             if (entity.Commodity is not null)
@@ -35,13 +42,13 @@ namespace AwesomeChilli.DAL.Repositories
 
         public ReviewEntity Find(Guid id)
         {
-            return Database.Instance.Reviews.Single(e => e.Id == id);
+            return database.Reviews.Single(e => e.Id == id);
         }
 
         public ReviewEntity Update(ReviewEntity? entity)
         {
             // nonsense
-            if(entity is null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"Parameter {nameof(entity)} of function {nameof(Update)} in {nameof(ReviewRepository)} was null");
             }
@@ -55,7 +62,7 @@ namespace AwesomeChilli.DAL.Repositories
 
 
             // delete found entity from its previous category
-            if(existing.Commodity is not null)
+            if (existing.Commodity is not null)
                 existing.Commodity?.Reviews?.Remove(existing);
 
             // copy references
@@ -78,16 +85,16 @@ namespace AwesomeChilli.DAL.Repositories
             var entity = Find(id);
 
             // delete found entity from its previous category
-            if(entity.Commodity is not null)
+            if (entity.Commodity is not null)
                 entity.Commodity?.Reviews?.Remove(entity);
 
             // remove existing entity
-            Database.Instance.Reviews.Remove(entity);
+            database.Reviews.Remove(entity);
         }
 
         public IEnumerable<ReviewEntity> GetPage(int page, int pageSize)
         {
-            return Database.Instance.Reviews.Skip(page * pageSize).Take(pageSize);
+            return database.Reviews.Skip(page * pageSize).Take(pageSize);
         }
     }
 }
