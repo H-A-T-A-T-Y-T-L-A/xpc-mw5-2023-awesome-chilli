@@ -44,6 +44,7 @@ namespace AwesomeChilli.API.Controllers
             try
             {
                 TEntity newEntity = mapper.DataObjectToEntity(newObject);
+                newEntity.Id = Guid.Empty;
                 Guid newEntityId = repository.Create(newEntity);
                 return Ok(newEntityId);
             }

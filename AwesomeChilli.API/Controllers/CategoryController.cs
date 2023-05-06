@@ -7,6 +7,8 @@ using AwesomeChilli.API.DataTransferObjects;
 using AwesomeChilli.API.DataMappers;
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.DAL.Repositories;
+using System.Security.Cryptography.X509Certificates;
+using AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -14,8 +16,16 @@ namespace AwesomeChilli.API.Controllers
     [ApiController]
     public class CategoryController : RepositoryControllerBase<CategoryEntity, CategoryData>
     {
-        public CategoryController(IRepository<CategoryEntity> repository, Mapper<CategoryEntity, CategoryData> mapper) : base(repository, mapper)
+        private readonly GetAllQuery<CategoryEntity> getAllQuery;
+        public CategoryController(IRepository<CategoryEntity> repository, Mapper<CategoryEntity, CategoryData> mapper, GetAllQuery<CategoryEntity> getAllQuery) : base(repository, mapper)
         {
+            this.getAllQuery = getAllQuery;
+        }
+
+        [HttpGet("/AllCategories")]
+        public IEnumerable<CategoryEntity> AllCategories()
+        {
+            return getAllQuery.Execute();
         }
     }
 }
