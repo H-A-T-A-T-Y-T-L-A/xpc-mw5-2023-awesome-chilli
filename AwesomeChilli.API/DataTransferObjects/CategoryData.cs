@@ -1,7 +1,7 @@
 ﻿using AwesomeChilli.DAL;
 using AwesomeChilli.DAL.Entities;
 
-namespace AwesomeChilli.API.EntityViews
+namespace AwesomeChilli.API.DataTransferObjects
 {
     public class CategoryData : DataObjectBase<CategoryEntity>
     {

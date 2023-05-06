@@ -2,7 +2,7 @@
 using AwesomeChilli.DAL.Entities;
 using Entities = AwesomeChilli.DAL.Entities;
 
-namespace AwesomeChilli.API.EntityViews
+namespace AwesomeChilli.API.DataTransferObjects
 {
     public abstract class DataObjectBase<TEntity> where TEntity : class, IEntity
     {

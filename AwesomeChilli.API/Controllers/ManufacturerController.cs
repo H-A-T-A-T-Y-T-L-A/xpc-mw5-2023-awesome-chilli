@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeChilli.DAL;
 using Entities = AwesomeChilli.DAL.Entities;
 using Repositories = AwesomeChilli.DAL.Repositories;
-using AwesomeChilli.API.EntityViews;
+using AwesomeChilli.API.DataTransferObjects;
 using AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.API.DataMappers;

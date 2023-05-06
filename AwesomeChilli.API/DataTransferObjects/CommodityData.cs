@@ -2,7 +2,7 @@
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.DAL.Repositories;
 
-namespace AwesomeChilli.API.EntityViews
+namespace AwesomeChilli.API.DataTransferObjects
 {
     public class CommodityData : DataObjectBase<CommodityEntity>
     {
