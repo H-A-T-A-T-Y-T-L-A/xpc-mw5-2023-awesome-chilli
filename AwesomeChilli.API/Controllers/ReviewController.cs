@@ -7,6 +7,7 @@ using AwesomeChilli.API.DataTransferObjects;
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.DataMappers;
+using AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -14,7 +15,7 @@ namespace AwesomeChilli.API.Controllers
     [ApiController]
     public class ReviewController : RepositoryControllerBase<ReviewEntity, ReviewData>
     {
-        public ReviewController(IRepository<ReviewEntity> repository, Mapper<ReviewEntity, ReviewData> mapper) : base(repository, mapper)
+        public ReviewController(IRepository<ReviewEntity> repository, Mapper<ReviewEntity, ReviewData> mapper, GetAllQuery<ReviewEntity> getAllQuery) : base(repository, mapper, getAllQuery)
         {
         }
     }

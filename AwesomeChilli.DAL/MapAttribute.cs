@@ -12,7 +12,7 @@ namespace AwesomeChilli.DAL
         Value, EntityId
     }
 
-    [System.AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class MapAttribute : Attribute
     {
         public string MapName { get; set; }

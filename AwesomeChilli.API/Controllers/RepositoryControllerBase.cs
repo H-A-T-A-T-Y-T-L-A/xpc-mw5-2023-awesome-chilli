@@ -7,6 +7,7 @@ using AwesomeChilli.API.DataTransferObjects;
 using AwesomeChilli.API.DataMappers;
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.DAL.Repositories;
+using AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -15,15 +16,17 @@ namespace AwesomeChilli.API.Controllers
         where TEntity : class, IEntity, new()
         where TDataObject : DataObjectBase<TEntity>, new()
     {
-        readonly IRepository<TEntity> repository;
-        readonly Mapper<TEntity, TDataObject> mapper;
-        public RepositoryControllerBase(IRepository<TEntity> repository, Mapper<TEntity, TDataObject> mapper)
+        internal readonly IRepository<TEntity> repository;
+        internal readonly Mapper<TEntity, TDataObject> mapper;
+        internal readonly GetAllQuery<TEntity> getAllQuery;
+        public RepositoryControllerBase(IRepository<TEntity> repository, Mapper<TEntity, TDataObject> mapper, GetAllQuery<TEntity> getAllQuery)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.getAllQuery = getAllQuery;
         }
 
-        [HttpPost("/Find[controller]")]
+        [HttpGet("/Find[controller]")]
         public ActionResult<TDataObject> Find(Guid guid)
         {
             try
@@ -44,6 +47,7 @@ namespace AwesomeChilli.API.Controllers
             try
             {
                 TEntity newEntity = mapper.DataObjectToEntity(newObject);
+                newEntity.Id = Guid.Empty;
                 Guid newEntityId = repository.Create(newEntity);
                 return Ok(newEntityId);
             }
@@ -82,12 +86,12 @@ namespace AwesomeChilli.API.Controllers
             }
         }
 
-        [HttpGet("/Page[controller]")]
-        public ActionResult<IEnumerable<TDataObject>> GetPage(int page, int PageSize)
+        [HttpGet("/GetAll[controller]")]
+        public ActionResult<IEnumerable<TDataObject>> GetAll()
         {
             try
             {
-                return Ok(repository.GetPage(page, PageSize).Select(mapper.EntityToDataObject));
+                return Ok(getAllQuery.Execute().Select(mapper.EntityToDataObject));
             }
             catch
             {

@@ -23,20 +23,20 @@ namespace AwesomeChilli.API.DataMappers
         // mapping methods
         public TDataObject EntityToDataObject(TEntity entity)
         {
-            TDataObject mappedDataObject = new();
-            MapObjects(entity, ref mappedDataObject);
+            MapObjects(entity, out TDataObject mappedDataObject);
             return mappedDataObject;
         }
         public TEntity DataObjectToEntity(TDataObject dataObject)
         {
-            TEntity mappedEntity = new();
-            MapObjects(dataObject, ref mappedEntity);
+            MapObjects(dataObject, out TEntity mappedEntity);
             return mappedEntity;
         }
 
         // universal mapping method, may be used for more things later
-        private void MapObjects<TFrom, TTo>(TFrom from, ref TTo to)
+        private void MapObjects<TFrom, TTo>(TFrom from, out TTo to)
+            where TTo : new()
         {
+            to = new();
             var fromProperties = typeof(TFrom).GetProperties();
             var toProperties = typeof(TTo).GetProperties();
 
@@ -51,10 +51,6 @@ namespace AwesomeChilli.API.DataMappers
                 // find the corresponding property on the object being mapped to
                 var toProperty = toProperties.FirstOrDefault(p => p.GetCustomAttribute<MapAttribute>()?.MapName == mapAttribute.MapName && p.CanWrite);
                 if (toProperty is null)
-                    continue;
-
-                // ignore unwritable properties, this can be used for one-way mapping
-                if (!toProperty.CanWrite)
                     continue;
 
                 // use the attribute on the object being mapped from
@@ -74,7 +70,7 @@ namespace AwesomeChilli.API.DataMappers
                         // and the other entity is a string, just get the Id of the IEntity
                         // and convert it to a string
                         if (fromProperty.GetValue(from) is IEntity fromEntityProperty
-                            && toProperty.PropertyType == typeof(string))
+                            && toProperty.PropertyType.IsAssignableFrom(typeof(string)))
                         {
                             toProperty.SetValue(to, fromEntityProperty.Id.ToString());
                         }
@@ -82,7 +78,8 @@ namespace AwesomeChilli.API.DataMappers
                         // use the service provider to locate a repository of the IEntity
                         // and find the desired entity
                         else if (fromProperty.GetValue(from) is string idString
-                            && Guid.TryParse(idString, out Guid entityId))
+                            && Guid.TryParse(idString, out Guid entityId)
+                            && typeof(IEntity).IsAssignableFrom(toProperty.PropertyType))
                         {
                             var repositoryType = typeof(IRepository<>).MakeGenericType(toProperty.PropertyType);
                             var repository = serviceProvider.GetService(repositoryType);
