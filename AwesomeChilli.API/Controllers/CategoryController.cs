@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AwesomeChilli.DAL;
-using Entities = AwesomeChilli.DAL.Entities;
-using Repositories = AwesomeChilli.DAL.Repositories;
 using AwesomeChilli.API.DataTransferObjects;
 using AwesomeChilli.API.DataMappers;
 using AwesomeChilli.DAL.Entities;
 using AwesomeChilli.DAL.Repositories;
-using System.Security.Cryptography.X509Certificates;
-using AwesomeChilli.DAL.Queries;
+using Queries = AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.API.Controllers
 {
@@ -16,16 +12,26 @@ namespace AwesomeChilli.API.Controllers
     [ApiController]
     public class CategoryController : RepositoryControllerBase<CategoryEntity, CategoryData>
     {
-        private readonly GetAllQuery<CategoryEntity> getAllQuery;
-        public CategoryController(IRepository<CategoryEntity> repository, Mapper<CategoryEntity, CategoryData> mapper, GetAllQuery<CategoryEntity> getAllQuery) : base(repository, mapper)
+        private readonly Queries.GetByName.GetByNameQuery<CategoryEntity> getByNameQuery;
+        public CategoryController(Queries.GetByName.GetByNameQuery<CategoryEntity> getByNameQuery,
+                                  IRepository<CategoryEntity> repository,
+                                  Mapper<CategoryEntity, CategoryData> mapper,
+                                  Queries.GetAllQuery<CategoryEntity> getAllQuery) : base(repository, mapper, getAllQuery)
         {
-            this.getAllQuery = getAllQuery;
+            this.getByNameQuery = getByNameQuery;
         }
 
-        [HttpGet("/AllCategories")]
-        public IEnumerable<CategoryEntity> AllCategories()
+        [HttpGet("/[controller]GetByName")]
+        public ActionResult<IEnumerable<CategoryData>> GetByName(string name)
         {
-            return getAllQuery.Execute();
+            try
+            {
+                return Ok(getByNameQuery.Execute(name).Select(mapper.EntityToDataObject));
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
     }
 }

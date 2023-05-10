@@ -70,7 +70,7 @@ namespace AwesomeChilli.API.DataMappers
                         // and the other entity is a string, just get the Id of the IEntity
                         // and convert it to a string
                         if (fromProperty.GetValue(from) is IEntity fromEntityProperty
-                            && toProperty.PropertyType == typeof(string))
+                            && toProperty.PropertyType.IsAssignableFrom(typeof(string)))
                         {
                             toProperty.SetValue(to, fromEntityProperty.Id.ToString());
                         }
@@ -79,7 +79,7 @@ namespace AwesomeChilli.API.DataMappers
                         // and find the desired entity
                         else if (fromProperty.GetValue(from) is string idString
                             && Guid.TryParse(idString, out Guid entityId)
-                            && toProperty.PropertyType == typeof(IEntity))
+                            && typeof(IEntity).IsAssignableFrom(toProperty.PropertyType))
                         {
                             var repositoryType = typeof(IRepository<>).MakeGenericType(toProperty.PropertyType);
                             var repository = serviceProvider.GetService(repositoryType);

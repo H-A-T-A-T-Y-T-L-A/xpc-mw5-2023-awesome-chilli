@@ -7,7 +7,8 @@ using AwesomeChilli.DAL.Entities;
 
 namespace AwesomeChilli.DAL.Queries
 {
-    public class GetAllQuery<TEntity> where TEntity : class, IEntity
+    public class GetAllQuery<TEntity>
+        where TEntity : class, IEntity
     {
         private readonly Database database;
 

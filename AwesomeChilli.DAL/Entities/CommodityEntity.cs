@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Queries = AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    public class CommodityEntity : EntityBase
+    public class CommodityEntity : EntityBase, Queries.GetByName.INamedEntity
     {
         [Map(nameof(Name))]
         public string Name { get; set; } = "";

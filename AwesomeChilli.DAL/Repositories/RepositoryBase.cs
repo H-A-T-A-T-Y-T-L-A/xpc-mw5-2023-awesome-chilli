@@ -42,9 +42,24 @@ namespace AwesomeChilli.DAL.Repositories
             return entity;
         }
 
+        public static void CopyProperties(TEntity sourceEntity, TEntity targetEntity)
+        {
+            var entityType = typeof(TEntity);
+            var properties = entityType.GetProperties();
+
+            foreach (var property in properties)
+                if (property.CanRead && property.CanWrite)
+                    property.SetValue(targetEntity, property.GetValue(sourceEntity));
+        }
+
         public Guid Update(TEntity entity)
         {
-            database.Update(entity);
+            var existing = database.Set<TEntity>().Find(entity.Id);
+            if(existing is null)
+                return Guid.Empty;
+
+            CopyProperties(entity, existing);
+            database.Update(existing);
             database.SaveChanges();
             return entity.Id;
         }

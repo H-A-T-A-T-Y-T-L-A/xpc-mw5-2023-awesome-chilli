@@ -1,13 +1,15 @@
-﻿using System;
+﻿using AwesomeChilli.DAL.Queries.GetByName;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Queries = AwesomeChilli.DAL.Queries;
 
 namespace AwesomeChilli.DAL.Entities
 {
-    public class ManufacturerEntity : EntityBase
+    public class ManufacturerEntity : EntityBase, Queries.GetByName.INamedEntity
     {
         [Map(nameof(Name))]
         public string Name { get; set; } = "";
